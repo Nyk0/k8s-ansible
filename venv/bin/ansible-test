@@ -1,4 +1,4 @@
-#!/root/ansible-k8s-crio/venv/bin/python
+#!/root/k8s-ansible/venv/bin/python
 # PYTHON_ARGCOMPLETE_OK
 """Command line entry point for ansible-test."""
 
