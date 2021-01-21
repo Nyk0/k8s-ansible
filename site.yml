@@ -59,3 +59,9 @@
     - name: Configure control plane
       include_role:
         name: cplane
+
+- hosts: compute
+  tasks:
+    - name: Join nodes
+      include_role:
+        name: join-workers
