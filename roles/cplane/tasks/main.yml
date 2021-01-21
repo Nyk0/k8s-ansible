@@ -4,7 +4,7 @@
 - pause: seconds=30
 - name: Create directory for kube config
   file: 
-    path: /home/root/.kube
+    path: /root/.kube
     state: directory
     owner: root
     group: root
@@ -12,7 +12,7 @@
 - name: Copy /etc/kubernetes/admin.conf to user home directory /home/root/.kube/config
   copy:
     src: /etc/kubernetes/admin.conf
-    dest: /home/root/.kube/config
+    dest: /root/.kube/config
     remote_src: yes
     owner: root
     group: root
@@ -20,7 +20,7 @@
 - pause: seconds=10
 - name: Remove the cache directory
   file: 
-    path: /home/root/.kube/cache
+    path: /root/.kube/cache
     state: absent
 - name: Install calico
   command: "kubectl apply -f https://docs.projectcalico.org/{{ calico_version }}/manifests/calico.yaml"
