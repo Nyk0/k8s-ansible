@@ -53,3 +53,9 @@
     - name: Install kubeadm
       include_role:
         name: k8s
+
+- hosts: control-plane
+  tasks:
+    - name: Configure control plane
+      include_role:
+        name: cplane
