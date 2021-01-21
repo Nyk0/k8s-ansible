@@ -1,0 +1,35 @@
+---
+- name: Install dependencies for kubeadm
+  apt:
+    name: ['apt-transport-https','wget','curl','gnupg']
+    state: present
+    update_cache: yes
+- name: Add Google repository key
+  shell: curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+  args:
+    warn: no 
+- name: Add Google repository server in /etc/apt/sources.list.d/kubernetes.list
+  copy:
+    src: kubernetes.list
+    dest: /etc/apt/sources.list.d/kubernetes.list
+- name: Install dependencies for kubeadm
+  apt:
+    name: ['kubeadm','kubectl','kubelet']
+    state: present
+    update_cache: yes
+- name: Add Google repository server in /etc/apt/sources.list.d/kubernetes.list
+  copy:
+    src: kubernetes.list
+    dest: /etc/apt/sources.list.d/kubernetes.list
+- name: Hold kubeadm
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  with_items:
+   - kubelet
+   - kubeadm
+   - kubectl
+- name: Set kubelet default settings in /etc/default/kubelet
+  copy:
+    src: kubelet
+    dest: /etc/default/kubelet
