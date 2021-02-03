@@ -38,3 +38,7 @@
     dest: /root/.bashrc
     line: 'source <(kubectl completion bash)'
     insertafter: EOF
+- name: Enable pods scheduling on all nodes
+  command: "kubectl taint nodes --all node-role.kubernetes.io/master-"
+- name: Taint the control-plane to dedicate it to slurmctld affinity pods
+  command: "kubectl taint nodes {{ ansible_hostname }} dedicated=slurmctld:NoSchedule"
