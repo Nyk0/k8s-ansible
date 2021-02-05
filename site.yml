@@ -1,6 +1,15 @@
 ---
 - hosts: all
   pre_tasks:
+    - name: Move iptables alternatives to legacy (calico issue)
+      community.general.alternatives:
+        name: "{{ item }}"
+        path: "/usr/sbin/{{ item }}-legacy"
+      with_items:
+        - iptables
+        - ip6tables
+        - arptables
+        - ebtables
     - name: Load br_netfilter
       community.general.modprobe:
         name: br_netfilter

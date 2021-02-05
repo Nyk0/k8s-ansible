@@ -4,13 +4,13 @@
     name: ['apt-transport-https','wget','curl','gnupg']
     state: present
     update_cache: yes
-- name: Add Google repository
-  ansible.builtin.apt_repository:
-    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
-    state: present
 - name: Add Google repository key
   ansible.builtin.apt_key:
     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+- name: Add Google repository
+  ansible.builtin.apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
     state: present
 - name: Install kubeadm
   apt:
