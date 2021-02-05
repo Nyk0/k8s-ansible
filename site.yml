@@ -1,6 +1,11 @@
 ---
 - hosts: all
   pre_tasks:
+    - name: Install iptables-legacy
+      apt:
+        name: ['arptables','ebtables','iptables']
+        update_cache: yes
+        state: present
     - name: Move iptables alternatives to legacy (calico issue)
       community.general.alternatives:
         name: "{{ item }}"
@@ -13,11 +18,6 @@
     - name: Load br_netfilter
       community.general.modprobe:
         name: br_netfilter
-        state: present
-    - name: Install arptables
-      apt:
-        name: arptables
-        update_cache: yes
         state: present
     - name: Set ip_forward_v4 in /etc/sysctl.d/k8s-net-forward.conf
       ansible.posix.sysctl:
