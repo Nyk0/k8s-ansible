@@ -1,0 +1,55 @@
+---
+- name: Load overlay module
+  community.general.modprobe:
+    name: overlay
+    state: present
+- name: Write in /etc/modules
+  lineinfile:
+    line: overlay
+    state: present
+    path: /etc/modules
+- name: Install Debian keyring
+  apt:
+    name: debian-archive-keyring
+    state: present
+    update_cache: yes
+- name: Add backports repository into sources list
+  ansible.builtin.apt_repository:
+    repo: "deb http://deb.debian.org/debian {{ debian_release }}-backports main"
+    state: present
+- name: Add libcontainers repository into sources list
+  ansible.builtin.apt_repository:
+    repo: "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/{{ linux_version }}/ /"
+    state: present
+- name: Add cri-o repository into sources list
+  ansible.builtin.apt_repository:
+    repo: "deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{ crio_version }}/{{ linux_version }}/ /"
+    state: present
+- name: Add apt libcontainers repository key
+  ansible.builtin.apt_key:
+    url: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/{{ linux_version }}/Release.key"
+    state: present
+- name: Add apt cri-o repository key
+  ansible.builtin.apt_key:
+    url: "https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}/{{ linux_version }}/Release.key"
+    state: present
+- name: Install cri-o dependencies
+  apt:
+    name: libseccomp2/buster-backports
+    state: present
+    update_cache: yes
+- name: Install cri-o
+  apt:
+    name: cri-o cri-o-runc
+    state: present
+    update_cache: yes
+- name: Update /etc/containers/registries.conf
+  copy:
+    src: registries.conf
+    dest: /etc/containers/registries.conf
+- name: Start crio
+  systemd:
+    name: crio
+    daemon_reload: yes
+    enabled: yes
+    state: started

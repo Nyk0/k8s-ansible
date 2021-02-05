@@ -30,15 +30,6 @@
       with_items:
         - net.bridge.bridge-nf-call-ip6tables
         - net.bridge.bridge-nf-call-iptables
-    - name: Move iptables alternatives to legacy (calico issue)
-      community.general.alternatives:
-        name: "{{ item }}"
-        path: "/usr/sbin/{{ item }}-legacy"
-      with_items:
-        - iptables
-        - ip6tables
-        - arptables
-        - ebtables
     - name: Disable swap in fstab
       replace:
         path: /etc/fstab
@@ -49,19 +40,19 @@
   tasks:
     - name: Install crio
       include_role:
-        name: cri-o
+        name: crio-install
     - name: Install kubeadm
       include_role:
-        name: k8s
+        name: kubeadm-install
 
 - hosts: control-plane
   tasks:
     - name: Configure control plane
       include_role:
-        name: cplane
+        name: kubeadm-init
 
 - hosts: compute
   tasks:
     - name: Join nodes
       include_role:
-        name: join-workers
+        name: kubeadm-join

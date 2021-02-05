@@ -4,24 +4,34 @@
     name: ['apt-transport-https','wget','curl','gnupg']
     state: present
     update_cache: yes
+- name: Add Google repository
+  ansible.builtin.apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
 - name: Add Google repository key
-  shell: curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-  args:
-    warn: no 
-- name: Add Google repository server in /etc/apt/sources.list.d/kubernetes.list
-  copy:
-    src: kubernetes.list
-    dest: /etc/apt/sources.list.d/kubernetes.list
-- name: Install dependencies for kubeadm
+  ansible.builtin.apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+- name: Install kubeadm
   apt:
-    name: ['kubeadm','kubectl','kubelet']
+    name: "kubeadm={{ kubernetes_version }}"
+    state: present
+    update_cache: yes
+- name: Install kubelet
+  apt:
+    name: "kubelet={{ kubernetes_version }}"
+    state: present
+    update_cache: yes
+- name: Install kubectl
+  apt:
+    name: "kubectl={{ kubernetes_version }}"
     state: present
     update_cache: yes
 - name: Add Google repository server in /etc/apt/sources.list.d/kubernetes.list
   copy:
     src: kubernetes.list
     dest: /etc/apt/sources.list.d/kubernetes.list
-- name: Hold kubeadm
+- name: Hold Kubernetes packages version
   dpkg_selections:
     name: "{{ item }}"
     selection: hold
