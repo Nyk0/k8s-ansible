@@ -1,1 +1,1 @@
-kubeadm join 172.16.0.2:6443 --token 3ctrgo.dh73d9vvnjghx7if     --discovery-token-ca-cert-hash sha256:d5a11dc8556bf1266c485b62a23d1476872bdad0a6c16a3ffdbe7a0d07f876de 
+kubeadm join 172.16.0.2:6443 --token xmf2y6.p68atz2vq2anxi50     --discovery-token-ca-cert-hash sha256:d8416721663f8ca489eaf5eba918ebb6349be6645750496c1557706f7cdde912 

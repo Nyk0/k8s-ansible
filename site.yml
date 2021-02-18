@@ -1,6 +1,21 @@
 ---
 - hosts: all
   pre_tasks:
+    - name: Create group nico
+      ansible.builtin.group:
+        name: nico
+        state: present
+        gid: "{{ nico_uid }}"
+    - name: Add the user nico with a specific uid and a primary group nico
+      ansible.builtin.user:
+        name: nico
+        comment: nico
+        uid: "{{ nico_uid }}"
+        group: nico
+        password: "{{ 'azerty' | password_hash('sha512') }}"
+        shell: /bin/bash
+        create_home: no
+        home: /nfs/home/nico
     - name: Install iptables-legacy
       apt:
         name: ['arptables','ebtables','iptables']
@@ -53,15 +68,19 @@
     - name: Install kubeadm
       include_role:
         name: kubeadm-install
-
 - hosts: control-plane
   tasks:
+    - name: Install NFS Server
+      include_role:
+        name: nfs-server
     - name: Configure control plane
       include_role:
         name: kubeadm-init
-
 - hosts: compute
   tasks:
+    - name: Install NFS Client
+      include_role:
+        name: nfs-client
     - name: Join nodes
       include_role:
         name: kubeadm-join

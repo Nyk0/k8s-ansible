@@ -1,0 +1,28 @@
+---
+- name: Install NFS Server
+  apt:
+    name: nfs-client
+    update_cache: yes
+    state: present
+- name: Write in /etc/modules
+  lineinfile:
+    line: "{{ groups[['control-plane'][0]] }}:/nfs/home   /nfs/homes    nfs4    noauto,x-systemd.automount,x-systemd.device-timeout=10,timeo=14 0  0"
+    state: present
+    path: /etc/fstab
+- name: Create mount point
+  file:
+    path: /nfs/home
+    state: directory
+    owner: root
+    group: root
+    mode: '0775'
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+- name: Restart filesystems systemd services
+  ansible.builtin.systemd:
+    state: restarted
+    name: "{{ item }}"
+  with_items:
+   - remote-fs.target
+   - local-fs.target
