@@ -17,16 +17,19 @@
     name: "kubeadm={{ kubernetes_version }}"
     state: present
     update_cache: yes
+    force: yes
 - name: Install kubelet
   apt:
     name: "kubelet={{ kubernetes_version }}"
     state: present
     update_cache: yes
+    force: yes
 - name: Install kubectl
   apt:
     name: "kubectl={{ kubernetes_version }}"
     state: present
     update_cache: yes
+    force: yes
 - name: Add Google repository server in /etc/apt/sources.list.d/kubernetes.list
   copy:
     src: kubernetes.list
