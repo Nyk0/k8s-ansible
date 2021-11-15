@@ -38,9 +38,9 @@
     dest: /root/.bashrc
     line: 'source <(kubectl completion bash)'
     insertafter: EOF
-- name: Enable pods scheduling on all nodes
-  command: "kubectl taint nodes --all node-role.kubernetes.io/master-"
-- name: Taint the control-plane to dedicate it to slurmctld affinity pods
-  command: "kubectl taint nodes {{ ansible_hostname }} dedicated=slurmctld:NoSchedule"
+#- name: Enable pods scheduling on all nodes
+#  command: "kubectl taint nodes --all node-role.kubernetes.io/master-"
+#- name: Taint the control-plane to dedicate it to slurmctld affinity pods
+#  command: "kubectl taint nodes {{ ansible_hostname }} dedicated=slurmctld:NoSchedule"
 - name: Add Docker private repo
   command: "kubectl create secret docker-registry regcred --docker-server=docker.io --docker-username=nyk0 --docker-password=docyp@SS! --docker-email=nicolas.greneche@gmail.com"

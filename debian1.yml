@@ -4,7 +4,7 @@ metadata:
   name: debian1
 spec:
   containers:
-  - image: debian:10
+  - image: debian:latest
     name: debian
     command: [ "/bin/bash", "-c", "--" ]
     args: [ "while true; do sleep 30; done;" ]

@@ -21,6 +21,11 @@
         name: ['arptables','ebtables','iptables']
         update_cache: yes
         state: present
+    - name: Install GPG
+      apt:
+        name: gnupg
+        update_cache: yes
+        state: present
     - name: Move iptables alternatives to legacy (calico issue)
       community.general.alternatives:
         name: "{{ item }}"

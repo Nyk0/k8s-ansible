@@ -1,4 +1,4 @@
 ---
-crio_version: "1.20"
-linux_version: Debian_10
-debian_release: buster
+crio_version: "1.22"
+linux_version: Debian_11
+debian_release: bullseye
