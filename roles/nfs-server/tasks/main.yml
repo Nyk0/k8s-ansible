@@ -9,26 +9,30 @@
     src: exports
     dest: /etc/exports
     force: yes
-- name: Create mount point
-  file:
-    path: /nfs/home
-    state: directory
-    owner: root
-    group: root
-    mode: '0775'
-- name: Create nico home
-  file:
-    path: /nfs/home/nico
-    state: directory
-    owner: nico
-    group: nico
-    mode: '0750'
-- name: Populate nico home
-  copy:
-    src: "{{ item }}"
-    dest: "/nfs/home/nico/{{ item }}"
-    force: yes
-  with_items:
-     - ".bashrc"
-     - ".profile"
-     - ".bash_logout"
+#- name: Create mount point
+#  file:
+#    path: /nfs/home
+#    state: directory
+#    owner: root
+#    group: root
+#    mode: '0775'
+#- name: Create nico home
+#  file:
+#    path: /nfs/home/nico
+#    state: directory
+#    owner: nico
+#    group: nico
+#    mode: '0750'
+#- name: Populate nico home
+#  copy:
+#    src: "{{ item }}"
+#    dest: "/nfs/home/nico/{{ item }}"
+#    force: yes
+#  with_items:
+#     - ".bashrc"
+#     - ".profile"
+#     - ".bash_logout"
+- name: Restart service nfs-server, in all cases
+  ansible.builtin.service:
+    name: nfs-server
+    state: restarted
